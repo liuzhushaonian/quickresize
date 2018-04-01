@@ -55,47 +55,45 @@ public class ImageHandler implements QuickHandler {
          * 优先处理翻转，因为如果有水印添加，则翻转过后水印也会被翻转
          */
 
-        BufferedImage source=ImageIO.read(file);
+        BufferedImage source = ImageIO.read(file);
 
-        int rw=source.getWidth();
-        int rh=source.getHeight();
+        int rw = source.getWidth();
+        int rh = source.getHeight();
 
         //翻转图片
-        if (conf.isRetro()){
+        if (conf.isRetro()) {
 
 
-            AffineTransform transform=null;
+            AffineTransform transform = null;
 
-            switch (conf.getRetroType()){
+            switch (conf.getRetroType()) {
 
 
                 case "上下翻转":
 
-                     transform = new AffineTransform(1,0,0,-1,0,source.getHeight()-1);
+                    transform = new AffineTransform(1, 0, 0, -1, 0, source.getHeight() - 1);
 
                     break;
 
                 case "左右翻转":
 
-                    transform = new AffineTransform(-1,0,0,1,source.getWidth()-1,0);
+                    transform = new AffineTransform(-1, 0, 0, 1, source.getWidth() - 1, 0);
 
                     break;
             }
 
             if (transform != null) {
-                AffineTransformOp op=new AffineTransformOp(transform,AffineTransformOp.TYPE_BILINEAR);
+                AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
 
-                BufferedImage image=op.filter(source,null);
+                BufferedImage image = op.filter(source, null);
 
-                file=new File(conf.getOutputPath()+"/"+file.getName());
+                file = new File(conf.getOutputPath() + "/" + file.getName());
 
-                ImageIO.write(image,"jpg",file);
+                ImageIO.write(image, "jpg", file);
 
             }
 
         }
-
-
 
 
         Thumbnails.Builder<File> builder = Thumbnails.of(file);
@@ -104,7 +102,7 @@ public class ImageHandler implements QuickHandler {
         switch (conf.getSCALE_TYPE()) {
             case 10:
 
-                builder.size(rw,rh);
+                builder.size(rw, rh);
                 break;
             case 20:
 
@@ -117,7 +115,7 @@ public class ImageHandler implements QuickHandler {
                 int h = (int) conf.getScaleH();
 
                 if (w == 0 || h == 0) {
-                    builder.size(rw,rh);
+                    builder.size(rw, rh);
                 } else {
                     builder.size(w, h);
                 }
@@ -127,9 +125,9 @@ public class ImageHandler implements QuickHandler {
 
         //旋转图片
 
-        if (conf.isRotation()){
+        if (conf.isRotation()) {
 
-            double r=conf.getRotationCount();
+            double r = conf.getRotationCount();
 
             builder.rotate(r);
 
@@ -137,22 +135,22 @@ public class ImageHandler implements QuickHandler {
 
 
         //添加水印
-        if (conf.isAddWater()){
+        if (conf.isAddWater()) {
 
             //添加文字水印
-            if (conf.isAddTextWater()){
+            if (conf.isAddTextWater()) {
 
-                String text=conf.getTextWater();
-
-
-                builder.watermark(conf.getPositions(),createImage(text),conf.getWaterTrans());
+                String text = conf.getTextWater();
 
 
-            }else {//添加图片水印
+                builder.watermark(conf.getPositions(), drawTranslucentStringPic(text), conf.getWaterTrans());
+
+
+            } else {//添加图片水印
 
                 try {
 
-                    builder.watermark(conf.getPositions(),ImageIO.read(new File(conf.getWaterPath())),conf.getWaterTrans());
+                    builder.watermark(conf.getPositions(), ImageIO.read(new File(conf.getWaterPath())), conf.getWaterTrans());
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -164,32 +162,30 @@ public class ImageHandler implements QuickHandler {
         //输出质量
 
 
-
         System.out.println(conf.getImageQuality());
         builder.outputQuality(conf.getImageQuality());
-        String name="";
+        String name = "";
 
-        if (!conf.getFormat().equals("不改变")){
+        if (!conf.getFormat().equals("不改变")) {
             builder.outputFormat(conf.getFormat());
 
-            int l=file.getName().lastIndexOf(".");
+            int l = file.getName().lastIndexOf(".");
 
-            name=file.getName().substring(0,l);
-        }else {
+            name = file.getName().substring(0, l);
+        } else {
 
-            name=file.getName();
+            name = file.getName();
         }
 
 
-
-        builder.toFile(conf.getOutputPath()+"/"+name);
+        builder.toFile(conf.getOutputPath() + "/" + name);
 
     }
 
 
-    public  BufferedImage createImage(String text) {
+    public BufferedImage createImage(String text) {
 
-        Font font=new Font("宋体", Font.PLAIN, 30);
+        Font font = new Font("宋体", Font.PLAIN, 30);
 
         // 获取font的样式应用在str上的整个矩形
         int[] arr = getWidthAndHeight(text, font);
@@ -199,6 +195,8 @@ public class ImageHandler implements QuickHandler {
         BufferedImage image = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_BGR);//创建图片画布
         Graphics g = image.getGraphics();
+
+
         g.setColor(Color.WHITE); // 先用白色填充整张图片,也就是背景
         g.fillRect(0, 0, width, height);//画出矩形区域，以便于在矩形区域内写入文字
         g.setColor(Color.black);// 再换成黑色，以便于写入文字
@@ -226,5 +224,29 @@ public class ImageHandler implements QuickHandler {
 
         return new int[]{width, height};
     }
+
+
+    private BufferedImage drawTranslucentStringPic(String drawStr) {
+
+        Font font = new Font("宋体", Font.PLAIN, 30);
+
+        int[] arr = getWidthAndHeight(drawStr, font);
+        int width = arr[0];
+        int height = arr[1];
+        BufferedImage buffImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D gd = buffImg.createGraphics();
+
+
+        //设置透明  start
+        buffImg = gd.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
+        gd = buffImg.createGraphics();
+        //设置透明  end
+        gd.setFont(font); //设置字体
+        gd.setColor(Color.WHITE); //设置颜色
+//        gd.drawRect(0, 0, width - 1, height - 1); //画边框
+        gd.drawString(drawStr, 0, font.getSize()); //输出文字（中文横向居中）
+        return buffImg;
+    }
+
 
 }
