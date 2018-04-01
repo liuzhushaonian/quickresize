@@ -5,6 +5,7 @@
       <options>
         <option name="appClass" value="view.MainView" />
         <option name="description" value="" />
+        <option name="height" value="600" />
         <option name="htmlPlaceholderId" value="" />
         <option name="icons">
           <JavaFxApplicationIcons>
@@ -16,13 +17,14 @@
         <option name="nativeBundle" value="all" />
         <option name="title" value="QuickResize" />
         <option name="vendor" value="" />
-        <option name="version" value="0.1.9" />
+        <option name="version" value="0.1.10" />
+        <option name="width" value="700" />
       </options>
     </properties>
     <root id="root">
       <element id="archive" name="quickresize.jar">
         <element id="module-output" name="quickresize" />
-        <element id="file-copy" path="$MAVEN_REPOSITORY$/net/coobird/thumbnailator/0.4.8/thumbnailator-0.4.8.jar" />
+        <element id="library" level="project" name="Maven: net.coobird:thumbnailator:0.4.8" />
       </element>
     </root>
   </artifact>
