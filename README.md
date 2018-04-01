@@ -30,6 +30,34 @@ Windows、Linux、Mac或其他拥有JDK8环境的平台，移动平台（Android
 
 没啥技术可言，就是用了个线程池，避免大量图片处理不过来，有兴趣看源码。
 
+# 编译&打包
+
+本项目基于maven，故可使用maven进行打包，我也有使用maven打的可执行jar文件，双击即可使用软件，但前提是有JRE环境。
+
+maven打包方法：
+
+```
+mvn package assembly:single 
+```  
+
+当然，本应用主要还是FX，IDEA提供了很方便的打包方式。
+
+在IDEA界面，file—Project Structure—Artifacts，之后流程如下
+
+![alt](https://github.com/liuzhushaonian/quickresize/blob/master/screen_short/QQ20180401-224223.png)
+
+![image](https://github.com/liuzhushaonian/quickresize/blob/master/screen_short/QQ20180401-224332.png)
+
+![image](https://github.com/liuzhushaonian/quickresize/blob/master/screen_short/QQ20180401-224650.png)
+
+![image](https://github.com/liuzhushaonian/quickresize/blob/master/screen_short/QQ20180401-224719.png)
+
+![image](https://github.com/liuzhushaonian/quickresize/blob/master/screen_short/QQ20180401-224731.png)
+
+![image](https://github.com/liuzhushaonian/quickresize/blob/master/screen_short/QQ20180401-224855.png)
+
+总之没啥难度，就是麻烦，尤其在图标这一块，win那边还没适配好图标呢。
+
 # 感谢
 
 感谢以下开源框架：
