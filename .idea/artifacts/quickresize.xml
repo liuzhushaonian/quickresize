@@ -1,0 +1,29 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="quickresize">
+    <output-path>$PROJECT_DIR$/out/artifacts/quickresize</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="view.MainView" />
+        <option name="description" value="" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="icons">
+          <JavaFxApplicationIcons>
+            <option name="linuxIcon" value="$PROJECT_DIR$/src/main/res/Icon.icns" />
+            <option name="macIcon" value="$PROJECT_DIR$/src/main/res/Icon.icns" />
+            <option name="windowsIcon" value="$PROJECT_DIR$/src/main/res/Icon.icns" />
+          </JavaFxApplicationIcons>
+        </option>
+        <option name="nativeBundle" value="all" />
+        <option name="title" value="QuickResize" />
+        <option name="vendor" value="" />
+        <option name="version" value="0.1.9" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="quickresize.jar">
+        <element id="module-output" name="quickresize" />
+        <element id="file-copy" path="$MAVEN_REPOSITORY$/net/coobird/thumbnailator/0.4.8/thumbnailator-0.4.8.jar" />
+      </element>
+    </root>
+  </artifact>
+</component>
